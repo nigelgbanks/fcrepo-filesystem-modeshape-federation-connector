@@ -1,20 +1,26 @@
+
 package org.fcrepo.connector.filesystem;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.regex.Pattern;
 
 /**
- * A {@link FilenameFilter} implementation that supports an inclusion and exclusion pattern.
+ * A {@link FilenameFilter} implementation that supports an inclusion and
+ * exclusion pattern.
  */
 class InclusionExclusionFilenameFilter implements java.io.FilenameFilter {
+
     private String inclusionPattern = null;
+
     private String exclusionPattern = null;
+
     private Pattern inclusion;
+
     private Pattern exclusion;
+
     private Pattern extraPropertiesExclusion;
 
-    public void setExclusionPattern( String exclusionPattern ) {
+    public void setExclusionPattern(final String exclusionPattern) {
         this.exclusionPattern = exclusionPattern;
         if (exclusionPattern == null) {
             this.exclusion = null;
@@ -23,7 +29,7 @@ class InclusionExclusionFilenameFilter implements java.io.FilenameFilter {
         }
     }
 
-    public void setExtraPropertiesExclusionPattern( String exclusionPattern ) {
+    public void setExtraPropertiesExclusionPattern(final String exclusionPattern) {
         if (exclusionPattern == null) {
             this.extraPropertiesExclusion = null;
         } else {
@@ -31,7 +37,7 @@ class InclusionExclusionFilenameFilter implements java.io.FilenameFilter {
         }
     }
 
-    public void setInclusionPattern( String inclusionPattern ) {
+    public void setInclusionPattern(final String inclusionPattern) {
         this.inclusionPattern = inclusionPattern;
         if (inclusionPattern == null) {
             this.inclusion = null;
@@ -49,18 +55,30 @@ class InclusionExclusionFilenameFilter implements java.io.FilenameFilter {
     }
 
     @Override
-    public boolean accept( File file,
-                           String name ) {
+    public boolean accept(final File file, final String name) {
         if (inclusionPattern == null) {
             // Include unless it matches an exclusion ...
-            if (exclusionPattern != null && exclusion.matcher(name).matches()) return false;
-            if (extraPropertiesExclusion != null && extraPropertiesExclusion.matcher(name).matches()) return false;
+            if (exclusionPattern != null && exclusion.matcher(name).matches()) {
+                return false;
+            }
+            if (extraPropertiesExclusion != null &&
+                    extraPropertiesExclusion.matcher(name).matches()) {
+                return false;
+            }
             return true;
         }
-        // Include ONLY if it matches the inclusion AND not matched by the exclusions ...
-        if (!inclusion.matcher(name).matches()) return false;
-        if (exclusionPattern != null && exclusion.matcher(name).matches()) return false;
-        if (extraPropertiesExclusion != null && extraPropertiesExclusion.matcher(name).matches()) return false;
+        // Include ONLY if it matches the inclusion AND not matched by the
+        // exclusions ...
+        if (!inclusion.matcher(name).matches()) {
+            return false;
+        }
+        if (exclusionPattern != null && exclusion.matcher(name).matches()) {
+            return false;
+        }
+        if (extraPropertiesExclusion != null &&
+                extraPropertiesExclusion.matcher(name).matches()) {
+            return false;
+        }
         return true;
     }
 }
